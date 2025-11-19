@@ -6,6 +6,7 @@ function normalize(s: string): string {
 
 test('Frontend — Place order to Thank You with dynamic delivery slot selection', async ({
   page,
+  myActionsPage,
   getAddressPage,
   deliveryTypePage,
   deliverySchedulePage,
@@ -18,21 +19,15 @@ test('Frontend — Place order to Thank You with dynamic delivery slot selection
 }) => {
   await page.goto('/login');
 
-  // 2. Place a new order (button or link)
-  const placeOrderBtn = page.getByRole('button', { name: /place a new order/i }).first();
-  if (await placeOrderBtn.count()) {
-    await placeOrderBtn.click();
-  } else {
-    const placeOrderLink = page.getByRole('link', { name: /place a new order/i }).first();
-    if (await placeOrderLink.count()) {
-      await placeOrderLink.click();
-    }
-  }
+  // 2. Click on “Place a new order.”
+  await myActionsPage.clickPlaceNewOrder();
 
-  // 3. /getAddress -> Continue
+  expect(page.url()).toContain('/getAddress');
+
+  // 3. Once you are on the /getAddress page, click on Continue.
   await getAddressPage.continue();
 
-  // 4. Delivery type -> Home + Continue
+  // 4. Select “Delivery to a home” and click on Continue.
   await deliveryTypePage.chooseHomeDelivery();
   await deliveryTypePage.continue();
 

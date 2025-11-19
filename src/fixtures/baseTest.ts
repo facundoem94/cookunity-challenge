@@ -8,6 +8,7 @@ import { CheckoutPage } from '../pages/CheckoutPage';
 import { ConfirmationPage } from '../pages/ConfirmationPage';
 import { ThankYouPage } from '../pages/ThankYouPage';
 import { BottomBar } from '../pages/components/BottomBar';
+import { MyActionsPage } from '../pages/MyActionsPage';
 
 export type OrderState = {
   selectedDateText?: string;
@@ -24,6 +25,7 @@ type PageFixtures = {
   confirmationPage: ConfirmationPage;
   thankYouPage: ThankYouPage;
   bottomBar: BottomBar;
+  myActionsPage: MyActionsPage;
   orderState: OrderState;
 };
 
@@ -54,6 +56,9 @@ export const test = base.extend<PageFixtures>({
   },
   bottomBar: async ({ page }, use) => {
     await use(new BottomBar(page));
+  },
+  myActionsPage: async ({ page }, use) => {
+    await use(new MyActionsPage(page));
   },
   orderState: async ({}, use) => {
     const state: OrderState = {};

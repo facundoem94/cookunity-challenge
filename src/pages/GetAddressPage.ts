@@ -5,10 +5,11 @@ export class GetAddressPage extends BasePage {
   constructor(page: Page) {
     super(page);
   }
-  private readonly continueButton = 'button:has-text("Continue")';
+
+  private readonly continueButtonLabel = 'Continue';
 
   async continue(): Promise<void> {
-    await this.page.locator(this.continueButton).first().click();
+    await this.clickByButtonOrLink(this.continueButtonLabel);
   }
 }
 

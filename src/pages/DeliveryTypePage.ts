@@ -5,18 +5,11 @@ export class DeliveryTypePage extends BasePage {
   constructor(page: Page) {
     super(page);
   }
-  private readonly homeDeliveryOption =
-    'label:has-text("Delivery to a home"), [role="radio"]:has-text("Delivery to a home")';
+  
   private readonly continueButton = 'button:has-text("Continue")';
 
   async chooseHomeDelivery(): Promise<void> {
-    // Some UIs use label wrapping an input, others are radios
-    const option = this.page.locator(this.homeDeliveryOption).first();
-    if (await option.getAttribute('for')) {
-      await option.click();
-    } else {
-      await option.click();
-    }
+    await this.page.locator('label').filter({ hasText: 'Delivered to a home' }).click();
   }
 
   async continue(): Promise<void> {

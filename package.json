@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "npx playwright test",
+    "test:frontend": "npx playwright test tests/e2e/frontend/order.spec.ts",
+    "test:api": "npx playwright test tests/api/posts.spec.ts",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "clean": "rm -rf artifacts"

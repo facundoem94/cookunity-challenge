@@ -6,6 +6,16 @@ export abstract class BasePage {
   constructor(page: Page) {
     this.page = page;
   }
+
+  protected async clickByButtonOrLink(name: string): Promise<void> {
+    const button = this.page.getByRole('button', { name, exact: true }).first();
+    if (await button.count()) {
+      await button.click();
+      return;
+    }
+    const link = this.page.getByRole('link', { name, exact: true }).first();
+    await link.click();
+  }
 }
 
 

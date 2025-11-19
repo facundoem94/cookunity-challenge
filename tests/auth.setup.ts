@@ -8,29 +8,19 @@ const authFile = path.resolve(authDir, 'user.json');
 setup('authenticate', async ({ page }) => {
   fs.mkdirSync(authDir, { recursive: true });
 
-  const baseURL = process.env.CU_BASE_URL || 'https://app.business.qa.cookunity.com';
   const email = process.env.CU_EMAIL || '';
   const password = process.env.CU_PASSWORD || '';
 
-  await page.goto(`${baseURL}/login`);
+  expect(email.trim(), 'CU_EMAIL must be set').toBeTruthy();
+  expect(password.trim(), 'CU_PASSWORD must be set').toBeTruthy();
 
-  const emailField = page.locator('input[name="email"], input[type="email"]');
-  const passwordField = page.locator('input[name="password"], input[type="password"]');
-  const submitButton = page.locator('button[type="submit"], button:has-text("Sign in"), button:has-text("Log in")');
+  await page.goto('/login');
 
-  if (await emailField.count()) {
-    await emailField.first().fill(email);
-  }
-  if (await passwordField.count()) {
-    await passwordField.first().fill(password);
-  }
-  if (await submitButton.count()) {
-    await submitButton.first().click();
-  }
+  await page.getByRole('textbox', { name: 'Email' }).first().fill(email);
+  await page.getByRole('textbox', { name: 'Password' }).first().fill(password);
+  await page.getByRole('button', { name: 'Sign In' }).first().click();
 
-  // Wait until we are no longer on the login page and user session is established
-  await page.waitForLoadState('networkidle');
-  await expect(page).not.toHaveURL(/\/login(\?|$)/);
+  await expect(page.locator('[data-cy="account-page"]')).toBeVisible();
 
   await page.context().storageState({ path: authFile });
 });
