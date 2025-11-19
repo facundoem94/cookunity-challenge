@@ -5,20 +5,17 @@ export class LoginPage extends BasePage {
   constructor(page: Page) {
     super(page);
   }
-  private readonly emailInput = 'input[name="email"], input[type="email"]';
-  private readonly passwordInput = 'input[name="password"], input[type="password"]';
-  private readonly submitButton = 'button[type="submit"], button:has-text("Sign in"), button:has-text("Log in")';
 
   async goto(): Promise<void> {
     await this.page.goto('/login');
   }
 
   async login(email: string, password: string): Promise<void> {
-    await this.page.locator(this.emailInput).first().fill(email);
-    await this.page.locator(this.passwordInput).first().fill(password);
-    await this.page.locator(this.submitButton).first().click();
-    await this.page.waitForLoadState('networkidle');
-    await expect(this.page).not.toHaveURL(/\/login$/);
+  await this.page.goto('/login');
+  await this.page.getByRole('textbox', { name: 'Email' }).first().fill(email);
+  await this.page.getByRole('textbox', { name: 'Password' }).first().fill(password);
+  await this.page.getByRole('button', { name: 'Sign In' }).first().click();
+  await expect(this.page.locator('[data-cy="account-page"]')).toBeVisible({timeout: 30000});
   }
 }
 

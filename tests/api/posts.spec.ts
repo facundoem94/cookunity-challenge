@@ -16,32 +16,48 @@ test.describe('GoRest API', () => {
     expect(detailJson?.data?.id).toBe(firstId);
   });
 
-  test('POST then PATCH', async ({ api }) => {
+  test('POST then PATCH', async ({ api, request }) => {
     const token = process.env.GOREST_TOKEN || '';
-    const userId = process.env.GOREST_USER_ID || '';
     expect(token, 'GOREST_TOKEN must be set').toBeTruthy();
-    expect(userId, 'GOREST_USER_ID must be set').toBeTruthy();
 
-    const postRes = await api.post('/posts', {
+    // Get a random user id from the users list (The challenge didn't specify a valid user id and without that the POST request would fail, so i found this endpoint to get a list of users and use the first one)
+    const usersRes = await request.get(`${GOREST_BASE_URL}/users`);
+    expect(usersRes.status()).toBe(200);
+    const usersJson = await usersRes.json();
+    const firstUserId = usersJson?.data?.[0]?.id;
+    expect(firstUserId).toBeTruthy();
+
+    // Create a new post
+    const postRes = await api.post('/public/v1/posts', {
       data: {
         title: 'QA Challenge Initial Post',
         body: 'This post was created to test PATCH operations in the QA challenge.',
-        user_id: userId,
+        user_id: firstUserId,
       },
     });
+
+    // Validate the response status
     expect([200, 201]).toContain(postRes.status());
+
+    // Get the created post
     const created = await postRes.json();
     const createdPostId = created?.data?.id;
     expect(createdPostId).toBeTruthy();
 
-    const patchRes = await api.patch(`/posts/${createdPostId}`, {
+    // Update the post
+    const patchRes = await api.patch(`/public/v1/posts/${createdPostId}`, {
       data: {
         title: 'Updated QA Challenge Post Title',
         body: 'This is a test update made during the QA automation challenge.',
       },
     });
+
+    // Validate the response status
     expect([200, 201]).toContain(patchRes.status());
+    
     const patched = await patchRes.json();
+
+    // Validate the response data
     expect(patched?.data?.id).toBe(createdPostId);
     expect(patched?.data?.title).toBe('Updated QA Challenge Post Title');
   });
