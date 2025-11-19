@@ -1,9 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
-import dotenv from 'dotenv';
-import path from 'path';
-
-// Load environment variables from .env file
-dotenv.config({ path: path.resolve(__dirname, '.env') });
+import 'dotenv/config';
 
 /**
  * @see https://playwright.dev/docs/test-configuration
@@ -43,46 +39,33 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
+    // Setup project to create authenticated storage state once.
+    { name: 'setup', testMatch: /.*\.setup\.ts/ },
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/user.json',
+      },
+      dependencies: ['setup'],
     },
 
     {
       name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      use: {
+        ...devices['Desktop Firefox'],
+        storageState: 'playwright/.auth/user.json',
+      },
+      dependencies: ['setup'],
     },
-
     {
       name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      use: {
+        ...devices['Desktop Safari'],
+        storageState: 'playwright/.auth/user.json',
+      },
+      dependencies: ['setup'],
     },
 
-    /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
-    // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
-    // },
-
-    /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-    // },
   ],
-
-  /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://localhost:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
 });
