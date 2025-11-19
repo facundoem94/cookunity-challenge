@@ -12,7 +12,7 @@
     "test:all": "npm run test:api && npm run test:frontend && node scripts/generate-report.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Facundo Ezequiel Martinez",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
