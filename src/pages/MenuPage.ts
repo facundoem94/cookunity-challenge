@@ -10,6 +10,8 @@ export class MenuPage extends BasePage {
   private readonly addMealButton = 'button.cu-btn.cu-primary-light.bold.add-meal, button.add-meal-mobile';
   private readonly quantityInput = 'input.quantity';
   private readonly incrementButton = 'button.increment';
+  private readonly cartArea = '[data-cy="cart"]';
+  private readonly checkoutButton = '[data-cy="button-checkout"]';
 
   async addMeal(mealName: string, targetCount = 25): Promise<void> {
     const dish = this.page
@@ -34,6 +36,11 @@ export class MenuPage extends BasePage {
     for (let i = 0; i < incrementsNeeded; i += 1) {
       await increment.click();
     }
+  }
+
+  async clickOrderCheckoutButton(): Promise<void> {
+    await this.page.locator(this.cartArea).first().hover();
+    await this.page.locator(this.checkoutButton).first().click();
   }
 }
 

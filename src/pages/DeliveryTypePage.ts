@@ -6,14 +6,14 @@ export class DeliveryTypePage extends BasePage {
     super(page);
   }
 
-  private readonly continueButtonLabel = 'Continue';
+  private readonly continueButton = '[data-cy="button-continue"]';
 
   async chooseHomeDelivery(): Promise<void> {
     await this.page.locator('label').filter({ hasText: 'Delivered to a home' }).click();
   }
 
   async continue(): Promise<void> {
-    await this.clickByButtonOrLink(this.continueButtonLabel);
+    await this.page.locator(this.continueButton).first().click();
   }
 }
 

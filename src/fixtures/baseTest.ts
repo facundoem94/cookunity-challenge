@@ -7,7 +7,6 @@ import { MenuPage } from '../pages/MenuPage';
 import { CheckoutPage } from '../pages/CheckoutPage';
 import { ConfirmationPage } from '../pages/ConfirmationPage';
 import { ThankYouPage } from '../pages/ThankYouPage';
-import { BottomBar } from '../pages/components/BottomBar';
 import { MyActionsPage } from '../pages/MyActionsPage';
 
 type PageFixtures = {
@@ -19,7 +18,6 @@ type PageFixtures = {
   checkoutPage: CheckoutPage;
   confirmationPage: ConfirmationPage;
   thankYouPage: ThankYouPage;
-  bottomBar: BottomBar;
   myActionsPage: MyActionsPage;
 };
 
@@ -47,9 +45,6 @@ export const test = base.extend<PageFixtures>({
   },
   thankYouPage: async ({ page }, use) => {
     await use(new ThankYouPage(page));
-  },
-  bottomBar: async ({ page }, use) => {
-    await use(new BottomBar(page));
   },
   myActionsPage: async ({ page }, use) => {
     await use(new MyActionsPage(page));

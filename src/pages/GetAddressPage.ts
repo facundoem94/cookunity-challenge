@@ -6,10 +6,10 @@ export class GetAddressPage extends BasePage {
     super(page);
   }
 
-  private readonly continueButtonLabel = 'Continue';
+  private readonly continueButton = '[data-cy="button-continue"]';
 
   async continue(): Promise<void> {
-    await this.clickByButtonOrLink(this.continueButtonLabel);
+    await this.page.locator(this.continueButton).first().click();
   }
 }
 

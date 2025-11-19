@@ -14,7 +14,6 @@ test('Frontend — Place order to Thank You with dynamic delivery slot selection
   checkoutPage,
   confirmationPage,
   thankYouPage,
-  bottomBar,
 }) => {
   await page.goto('/login');
 
@@ -31,28 +30,29 @@ test('Frontend — Place order to Thank You with dynamic delivery slot selection
   await deliveryTypePage.continue();
 
   // 5. Select a delivery date and a delivery window, then click on Continue
-  await deliverySchedulePage.selectFirstAvailableDate();
+  const { date, time } = await deliverySchedulePage.selectFirstAvailableDate();
   await deliverySchedulePage.continue();
 
   // 6. Add 25 of a specific meal
   await menuPage.addMeal("Adobo Chicken Burrito Bowl", 25);
 
-  // 7. Reveal bottom bar and Order Checkout
-  await bottomBar.revealAndCheckout();
+  // 7 Click on the “Order Checkout” button (hidden by mouse over on the bottom bar).
+  await menuPage.clickOrderCheckoutButton();
 
-  // 8. Checkout -> Company Invoice
-  await checkoutPage.selectCompanyInvoice();
+  // 8. On the Checkout page, click on “Company Invoice.”
+  await checkoutPage.clickCompanyInvoiceButton();
 
-  // 9. Confirmation -> Order Checkout
-  await confirmationPage.placeOrder();
+  // 9. On the Confirmation page, click on Order Checkout.
+  await confirmationPage.orderCheckout();
 
-  // 10-11. Thank You -> Assertions
+  // 10. On the “Thank You” page, ensure details are correct.
   await thankYouPage.assertAddress('630 Flushing Avenue, 11206');
   await thankYouPage.assertEmail('testqachallenge@cookunity.com');
   await thankYouPage.assertPhone('+14412424244');
 
   const finalDate = normalize(await thankYouPage.getDeliveryDateText());
-  expect(finalDate.length).toBeGreaterThan(0);
+  expect(finalDate).toContain(normalize(date));
+  expect(finalDate).toContain(normalize(time));
 });
 
 

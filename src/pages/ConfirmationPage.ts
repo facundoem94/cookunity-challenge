@@ -5,9 +5,9 @@ export class ConfirmationPage extends BasePage {
   constructor(page: Page) {
     super(page);
   }
-  private readonly orderCheckoutButton = 'button:has-text("Order Checkout")';
+  private readonly orderCheckoutButton = '[data-cy="button-create-order"]';
 
-  async placeOrder(): Promise<void> {
+  async orderCheckout(): Promise<void> {
     await this.page.locator(this.orderCheckoutButton).first().click();
   }
 }
