@@ -7,11 +7,15 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 1,
   workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
+  reporter: [
+    ['html', { outputFolder: 'artifacts/playwright-report/frontend', open: 'never' }],
+    ['json', { outputFile: 'artifacts/results/frontend.json' }],
+  ],
   timeout: 60000,
   expect: {
     timeout: 10000,
   },
+  outputDir: 'artifacts/test-results/frontend',
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
     baseURL: process.env.CU_BASE_URL || 'https://app.business.qa.cookunity.com',
