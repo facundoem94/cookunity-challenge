@@ -53,7 +53,7 @@ test('Frontend — Place order to Thank You with dynamic delivery slot selection
   await thankYouPage.assertPhone('+14412424244');
 
   const finalDate = normalize(await thankYouPage.getDeliveryDateText());
-  const expectedDelivery = normalize(`${month} ${date}, ${year} ${time}`);
+  const expectedDelivery = normalize(`${month} ${date}, ${year} ${time.toUpperCase()}`);
   expect(finalDate).toContain(expectedDelivery);
 });
 
