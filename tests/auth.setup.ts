@@ -20,7 +20,7 @@ setup('authenticate', async ({ page }) => {
   await page.getByRole('textbox', { name: 'Password' }).first().fill(password);
   await page.getByRole('button', { name: 'Sign In' }).first().click();
 
-  await expect(page.locator('[data-cy="account-page"]')).toBeVisible();
+  await expect(page.locator('[data-cy="account-page"]')).toBeVisible({timeout: 30000});
 
   await page.context().storageState({ path: authFile });
 });

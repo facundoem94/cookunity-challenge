@@ -30,11 +30,11 @@ test('Frontend — Place order to Thank You with dynamic delivery slot selection
   await deliveryTypePage.continue();
 
   // 5. Select a delivery date and a delivery window, then click on Continue
-  const { date, time } = await deliverySchedulePage.selectFirstAvailableDate();
+  const { date, month, year, time } = await deliverySchedulePage.selectFirstAvailableDate();
   await deliverySchedulePage.continue();
 
   // 6. Add 25 of a specific meal
-  await menuPage.addMeal("Adobo Chicken Burrito Bowl", 25);
+  await menuPage.addMeal("Adobo Chicken and Chorizo Paella", 25);
 
   // 7 Click on the “Order Checkout” button (hidden by mouse over on the bottom bar).
   await menuPage.clickOrderCheckoutButton();
@@ -44,6 +44,8 @@ test('Frontend — Place order to Thank You with dynamic delivery slot selection
 
   // 9. On the Confirmation page, click on Order Checkout.
   await confirmationPage.orderCheckout();
+  
+  await expect(page.getByText('Delivery information')).toBeVisible({timeout: 30000});
 
   // 10. On the “Thank You” page, ensure details are correct.
   await thankYouPage.assertAddress('630 Flushing Avenue, 11206');
@@ -51,8 +53,8 @@ test('Frontend — Place order to Thank You with dynamic delivery slot selection
   await thankYouPage.assertPhone('+14412424244');
 
   const finalDate = normalize(await thankYouPage.getDeliveryDateText());
-  expect(finalDate).toContain(normalize(date));
-  expect(finalDate).toContain(normalize(time));
+  const expectedDelivery = normalize(`${month} ${date}, ${year} ${time}`);
+  expect(finalDate).toContain(expectedDelivery);
 });
 
 

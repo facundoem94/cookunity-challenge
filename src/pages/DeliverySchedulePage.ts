@@ -10,9 +10,13 @@ export class DeliverySchedulePage extends BasePage {
   private readonly enabledDaySelector = '[data-cy="dtp-day"]:not(.disabled)';
   private readonly availableTimeSelector = '[data-cy="dtp-hour"]';
   private readonly continueButton = '[data-cy="button-continue"]';
+  private readonly monthYearHeaderSelector = '.datetimepicker-days .switch';
 
-  async selectFirstAvailableDate(): Promise<{ date: string; time: string }> {
+  async selectFirstAvailableDate(): Promise<{ date: string; month: string; year: string; time: string }> {
     await this.page.locator(this.datePickerSelector).click();
+    const header = this.page.locator(this.monthYearHeaderSelector).first();
+    const headerText = (await header.textContent())?.trim() || '';
+    const [month = '', year = ''] = headerText.split(/\s+/);
     const dateEl = this.page.locator(this.enabledDaySelector).first();
     await dateEl.scrollIntoViewIfNeeded();
     const dateText = (await dateEl.textContent())?.trim() || '';
@@ -21,7 +25,7 @@ export class DeliverySchedulePage extends BasePage {
     const timeEl = this.page.locator(this.availableTimeSelector).first();
     const timeText = (await timeEl.textContent())?.trim() || '';
     await timeEl.click();
-    return { date: dateText, time: timeText };
+    return { date: dateText, month, year, time: timeText };
   }
 
   async continue(): Promise<void> {

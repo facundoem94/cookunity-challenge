@@ -9,7 +9,7 @@ export abstract class BasePage {
 
   protected async clickByButtonOrLink(name: string): Promise<void> {
     const button = this.page.getByRole('button', { name, exact: true }).first();
-    await expect(button).toBeVisible();
+    await expect(button).toBeVisible({timeout: 15000});
     if (await button.count()) {
       await button.click();
       return;

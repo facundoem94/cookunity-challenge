@@ -5,28 +5,27 @@ export class ThankYouPage extends BasePage {
   constructor(page: Page) {
     super(page);
   }
-  private readonly addressValue = '[data-testid="delivery-address"], text=Delivery sent to';
-  private readonly emailValue = '[data-testid="contact-email"]';
-  private readonly phoneValue = '[data-testid="contact-phone"]';
-  private readonly dateValue = '[data-testid="delivery-date"], text=Delivery date';
+  private readonly emailPhoneRow = 'p:has(img[src*=\"icon-user-circle\"]) .txt-norm-2';
+  private readonly dateRow = 'p:has(img[src*=\"icon-calendar-grey\"]) .txt-norm-2';
+  private readonly addressRow = 'p:has(img[src*=\"icon-location\"]) .txt-norm-2';
 
   async assertAddress(expected: string): Promise<void> {
-    const text = await this.readText(this.addressValue);
+    const text = await this.readText(this.addressRow);
     await expect(text).toContain(expected);
   }
 
   async assertEmail(expected: string): Promise<void> {
-    const text = await this.readText(this.emailValue);
+    const text = await this.readText(this.emailPhoneRow);
     await expect(text).toContain(expected);
   }
 
   async assertPhone(expected: string): Promise<void> {
-    const text = await this.readText(this.phoneValue);
+    const text = await this.readText(this.emailPhoneRow);
     await expect(text).toContain(expected);
   }
 
   async getDeliveryDateText(): Promise<string> {
-    return this.readText(this.dateValue);
+    return this.readText(this.dateRow);
   }
 
   private async readText(selector: string): Promise<string> {
