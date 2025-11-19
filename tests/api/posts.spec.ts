@@ -1,4 +1,4 @@
-import { test, expect } from './fixtures';
+import { test, expect } from '../../src/fixtures/baseApiTest';
 
 const GOREST_BASE_URL = 'https://gorest.co.in/public/v1';
 
