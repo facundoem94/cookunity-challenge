@@ -5,15 +5,15 @@ export class DeliveryTypePage extends BasePage {
   constructor(page: Page) {
     super(page);
   }
-  
-  private readonly continueButton = 'button:has-text("Continue")';
+
+  private readonly continueButtonLabel = 'Continue';
 
   async chooseHomeDelivery(): Promise<void> {
     await this.page.locator('label').filter({ hasText: 'Delivered to a home' }).click();
   }
 
   async continue(): Promise<void> {
-    await this.page.locator(this.continueButton).first().click();
+    await this.clickByButtonOrLink(this.continueButtonLabel);
   }
 }
 

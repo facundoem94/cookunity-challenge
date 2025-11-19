@@ -1,38 +1,21 @@
 import { Page } from '@playwright/test';
-import { type OrderState } from '../fixtures/baseTest';
 import { BasePage } from './BasePage';
 
 export class DeliverySchedulePage extends BasePage {
   constructor(page: Page) {
     super(page);
   }
-  private readonly enabledDateSelector =
-    '[aria-disabled="false"], [role="button"]:not([aria-disabled="true"]):not([disabled])';
-  private readonly windowListSelector =
-    '[data-testid="delivery-window"], [role="listitem"], button:has-text("AM"), button:has-text("PM")';
+  private readonly enabledDaySelector = '[data-cy="dtp-day"]:not(.disabled)';
+  private readonly availableTimeSelector = '[data-cy="dtp-hour"]';
+  private readonly continueButtonLabel = 'Continue';
 
-  async selectFirstAvailableDateAndWindow(orderState: OrderState): Promise<void> {
-    const firstDate = this.page.locator(this.enabledDateSelector).first();
-    await firstDate.scrollIntoViewIfNeeded();
-    const dateText = (await firstDate.textContent())?.trim() || '';
-    await firstDate.click();
+  async selectFirstAvailableDate(): Promise<void> {
+    await this.page.locator(this.enabledDaySelector).first().click();
+    await this.page.locator(this.availableTimeSelector).first().click();
+  }
 
-    const firstWindow = this.page.locator(this.enabledDateSelector).locator(this.windowListSelector).first();
-    if (await firstWindow.count()) {
-      await firstWindow.scrollIntoViewIfNeeded();
-      const windowText = (await firstWindow.textContent())?.trim() || '';
-      await firstWindow.click();
-      orderState.selectedDateText = dateText;
-      orderState.selectedWindowText = windowText;
-      return;
-    }
-
-    const anyWindow = this.page.locator(this.windowListSelector).first();
-    await anyWindow.scrollIntoViewIfNeeded();
-    const winText = (await anyWindow.textContent())?.trim() || '';
-    await anyWindow.click();
-    orderState.selectedDateText = dateText;
-    orderState.selectedWindowText = winText;
+  async continue(): Promise<void> {
+    await this.clickByButtonOrLink(this.continueButtonLabel);
   }
 }
 

@@ -10,11 +10,6 @@ import { ThankYouPage } from '../pages/ThankYouPage';
 import { BottomBar } from '../pages/components/BottomBar';
 import { MyActionsPage } from '../pages/MyActionsPage';
 
-export type OrderState = {
-  selectedDateText?: string;
-  selectedWindowText?: string;
-};
-
 type PageFixtures = {
   loginPage: LoginPage;
   getAddressPage: GetAddressPage;
@@ -26,7 +21,6 @@ type PageFixtures = {
   thankYouPage: ThankYouPage;
   bottomBar: BottomBar;
   myActionsPage: MyActionsPage;
-  orderState: OrderState;
 };
 
 export const test = base.extend<PageFixtures>({
@@ -59,10 +53,6 @@ export const test = base.extend<PageFixtures>({
   },
   myActionsPage: async ({ page }, use) => {
     await use(new MyActionsPage(page));
-  },
-  orderState: async ({}, use) => {
-    const state: OrderState = {};
-    await use(state);
   },
 });
 
